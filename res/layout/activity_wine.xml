@@ -34,11 +34,29 @@
                 android:layout_height="wrap_content"
                 android:text="wine_name" />
 
-            <RatingBar
-                android:id="@+id/wine_rating"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <RatingBar
+                    android:id="@+id/wine_rating"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" 
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/go_to_web_button"/>
+                
+                <ImageButton
+                    android:id="@+id/go_to_web_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/ic_menu_info_details"
+                    android:contentDescription="@string/go_to_web"
+                    android:onClick="goToWeb" />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/wine_company"

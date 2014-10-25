@@ -5,6 +5,9 @@ import java.util.Arrays;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -13,6 +16,8 @@ import biz.agbo.baccus.R;
 import biz.agbo.baccus.model.Wine;
 
 public class WebActivity extends Activity {
+	
+	public final static String EXTRA_WINE = "biz.agbo.baccus.extra.WINE";
 	
 	private WebView mBrowser = null;
 	private ProgressBar mLoading = null;
@@ -29,6 +34,28 @@ public class WebActivity extends Activity {
 
 
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		super.onCreateOptionsMenu(menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.web, menu);
+		return true;
+	}
+
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == R.id.menu_reload){
+			mBrowser.reload();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+
+
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_web);
@@ -40,9 +67,7 @@ public class WebActivity extends Activity {
 		
 		// Creo el modelo
 		
-		mWine = new Wine("Bembibre", "Tinto", R.drawable.bembibre, "http://www.dominiodetares.com/index.php/es/vinos/baltos/74-bembibrevinos", 
-				"Este vino muestra toda la complejidad y la elegancia de la variedad Mencía", "El bierzo", 5, "Dominio de tares",
-				Arrays.<String>asList(new String[]{"Mencía"}));
+		mWine = (Wine)getIntent().getSerializableExtra(EXTRA_WINE);
 		
 		// Configurar el browser
 		
