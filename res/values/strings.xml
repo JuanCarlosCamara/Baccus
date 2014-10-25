@@ -4,5 +4,6 @@
     <string name="app_name">Baccus</string>
     <string name="hello_world">Hola desde Baccus</string>
     <string name="action_settings">Settings</string>
+    <string name="wine_description">Imagen del vino</string>
 
 </resources>
