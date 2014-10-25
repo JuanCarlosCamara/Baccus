@@ -15,7 +15,7 @@
         android:text="@string/hello_world" />
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/wine_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView1"
