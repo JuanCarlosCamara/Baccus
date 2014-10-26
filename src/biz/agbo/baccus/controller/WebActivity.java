@@ -1,10 +1,8 @@
 package biz.agbo.baccus.controller;
 
-import java.util.Arrays;
-
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +13,7 @@ import android.widget.ProgressBar;
 import biz.agbo.baccus.R;
 import biz.agbo.baccus.model.Wine;
 
-public class WebActivity extends Activity {
+public class WebActivity extends ActionBarActivity {
 	
 	public final static String EXTRA_WINE = "biz.agbo.baccus.extra.WINE";
 	

@@ -2,10 +2,10 @@ package biz.agbo.baccus.controller;
 
 import java.util.Arrays;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,10 +18,11 @@ import android.widget.TextView;
 import biz.agbo.baccus.R;
 import biz.agbo.baccus.model.Wine;
 
-public class WineActivity extends Activity {
+public class WineActivity extends ActionBarActivity {
 	
 	public static final int SETTINGS_REQUEST = 1;
 	private static final String STATE_WINE_IMAGE_SCALE_TYPE = "wineImageScaleType";
+	private static final String TAG = "biz.agbo.baccus.log.WineActivity";
 	
 	private Wine mWine = null;
 	
@@ -39,7 +40,7 @@ public class WineActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.wine, menu);
+		inflater.inflate(R.menu.settings, menu);
 		return true;
 	}
 
