@@ -8,5 +8,6 @@
     <string name="reload">Recargar</string>
     <string name="go_to_web">Ir a la web</string>
     <string name="settings">Ajustes</string>
+    <string name="title_activity_winery">WineryActivity</string>
 
 </resources>

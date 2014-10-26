@@ -1,11 +1,8 @@
 package biz.agbo.baccus.controller;
 
-import java.util.Arrays;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +18,7 @@ import biz.agbo.baccus.model.Wine;
 public class WineActivity extends ActionBarActivity {
 	
 	public static final int SETTINGS_REQUEST = 1;
+	public static final String EXTRA_WINE = "biz.agbo.baccus.controller.WINE";
 	private static final String STATE_WINE_IMAGE_SCALE_TYPE = "wineImageScaleType";
 	private static final String TAG = "biz.agbo.baccus.log.WineActivity";
 	
@@ -60,9 +58,7 @@ public class WineActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_wine);
 		
 		// Creamos el modelo
-		mWine = new Wine("Bembibre", "Tinto", R.drawable.bembibre, "http://www.dominiodetares.com/index.php/es/vinos/baltos/74-bembibrevinos", 
-				"Este vino muestra toda la complejidad y la elegancia de la variedad Mencía", "El bierzo", 5, "Dominio de tares",
-				Arrays.<String>asList(new String[]{"Mencía"}));
+		mWine = (Wine) getIntent().getSerializableExtra(EXTRA_WINE);
 		
 		
 		// Accedemos a las vistas desde este controlador
