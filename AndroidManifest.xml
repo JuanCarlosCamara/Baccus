@@ -16,14 +16,14 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".controller.WineActivity">
+            android:name="biz.agbo.baccus.controller.activity.WineActivity">
         </activity>
-        <activity android:name=".controller.WebActivity" >
+        <activity android:name="biz.agbo.baccus.controller.activity.WebActivity" >
         </activity>
-        <activity android:name=".controller.SettingsActivity" >
+        <activity android:name="biz.agbo.baccus.controller.activity.SettingsActivity" >
         </activity>
         <activity
-            android:name=".controller.WineryActivity"
+            android:name="biz.agbo.baccus.controller.activity.WineryActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/app_name"  >
             <intent-filter>

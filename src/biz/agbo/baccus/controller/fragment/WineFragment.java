@@ -1,26 +1,30 @@
-package biz.agbo.baccus.controller;
+package biz.agbo.baccus.controller.fragment;
 
+import biz.agbo.baccus.R;
+import biz.agbo.baccus.controller.activity.SettingsActivity;
+import biz.agbo.baccus.controller.activity.WebActivity;
+import biz.agbo.baccus.model.Wine;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import biz.agbo.baccus.R;
-import biz.agbo.baccus.model.Wine;
+import android.widget.ImageView.ScaleType;
 
-public class WineActivity extends ActionBarActivity {
-	
+public class WineFragment extends Fragment {
+
 	public static final int SETTINGS_REQUEST = 1;
-	public static final String EXTRA_WINE = "biz.agbo.baccus.controller.WINE";
+	public static final String ARG_WINE = "biz.agbo.baccus.controller.fragment.WINE";
 	private static final String STATE_WINE_IMAGE_SCALE_TYPE = "wineImageScaleType";
-	private static final String TAG = "biz.agbo.baccus.log.WineActivity";
 	
 	private Wine mWine = null;
 	
@@ -35,41 +39,43 @@ public class WineActivity extends ActionBarActivity {
 	private ViewGroup mWineGrapesContainer = null;
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		MenuInflater inflater = getMenuInflater();
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// TODO Auto-generated method stub
+		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.settings, menu);
-		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == R.id.menu_settings){
-			Intent settings = new Intent(this, SettingsActivity.class);
+			Intent settings = new Intent(getActivity(), SettingsActivity.class);
 			settings.putExtra(SettingsActivity.EXTRA_WINE_IMAGE_SCALE_TYPE, mWineImage.getScaleType());
 			startActivityForResult(settings, SETTINGS_REQUEST);
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_wine);
+	public View onCreateView(LayoutInflater inflater,
+			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreateView(inflater, container, savedInstanceState);
 		
+		View root = inflater.inflate(R.layout.fragment_wine, container, false);
 		// Creamos el modelo
-		mWine = (Wine) getIntent().getSerializableExtra(EXTRA_WINE);
+		
+		mWine = (Wine) getArguments().getSerializable(ARG_WINE);
 		
 		
 		// Accedemos a las vistas desde este controlador
-		mWineImage = (ImageView)findViewById(R.id.wine_image);
-		mWineNameText = (TextView)findViewById(R.id.wine_name);
-		mWineTypeText = (TextView)findViewById(R.id.wine_type);
-		mWineOriginText = (TextView)findViewById(R.id.wine_origin);
-		mWineRatingBar = (RatingBar)findViewById(R.id.wine_rating);
-		mWineCompanyText = (TextView)findViewById(R.id.wine_company);
-		mWineNotesText = (TextView)findViewById(R.id.wine_notes);
-		mWineGrapesContainer = (ViewGroup)findViewById(R.id.grapes_container);
+		mWineImage = (ImageView)root.findViewById(R.id.wine_image);
+		mWineNameText = (TextView)root.findViewById(R.id.wine_name);
+		mWineTypeText = (TextView)root.findViewById(R.id.wine_type);
+		mWineOriginText = (TextView)root.findViewById(R.id.wine_origin);
+		mWineRatingBar = (RatingBar)root.findViewById(R.id.wine_rating);
+		mWineCompanyText = (TextView)root.findViewById(R.id.wine_company);
+		mWineNotesText = (TextView)root.findViewById(R.id.wine_notes);
+		mWineGrapesContainer = (ViewGroup)root.findViewById(R.id.grapes_container);
 		
 		// Damos valor a las vistas con el modelo
 		
@@ -83,7 +89,7 @@ public class WineActivity extends ActionBarActivity {
 		
 		// Creamos la lista de uvas
 		for(int i = 0; i<mWine.getGrapesCount(); i++){
-			TextView grapeText = new TextView(this);
+			TextView grapeText = new TextView(getActivity());
 			grapeText.setText(mWine.getGrape(i));
 			grapeText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
 			mWineGrapesContainer.addView(grapeText);
@@ -92,6 +98,8 @@ public class WineActivity extends ActionBarActivity {
 		if(savedInstanceState != null && savedInstanceState.containsKey(STATE_WINE_IMAGE_SCALE_TYPE)){
 			mWineImage.setScaleType((ScaleType) savedInstanceState.getSerializable(STATE_WINE_IMAGE_SCALE_TYPE));
 		}
+		
+		return root;
 	}
 	
 	public void changeImage(View v){
@@ -99,23 +107,24 @@ public class WineActivity extends ActionBarActivity {
 	}
 	
 	public void goToWeb(View v){
-		Intent webIntent = new Intent(this, WebActivity.class);
+		Intent webIntent = new Intent(getActivity(), WebActivity.class);
 		webIntent.putExtra(WebActivity.EXTRA_WINE, mWine);
 		startActivity(webIntent);
 	}
 	
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == SETTINGS_REQUEST && resultCode == RESULT_OK){
+		if(requestCode == SETTINGS_REQUEST && resultCode == Activity.RESULT_OK){
 			ScaleType scaleType = (ScaleType)data.getSerializableExtra(SettingsActivity.EXTRA_WINE_IMAGE_SCALE_TYPE);
 			mWineImage.setScaleType(scaleType);
 		}
 	}
 	
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(STATE_WINE_IMAGE_SCALE_TYPE, mWineImage.getScaleType());
 	}
+	
 }

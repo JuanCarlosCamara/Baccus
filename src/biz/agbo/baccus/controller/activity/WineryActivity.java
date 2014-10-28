@@ -1,4 +1,4 @@
-package biz.agbo.baccus.controller;
+package biz.agbo.baccus.controller.activity;
 
 import java.util.Arrays;
 

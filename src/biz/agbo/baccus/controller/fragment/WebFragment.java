@@ -1,21 +1,24 @@
-package biz.agbo.baccus.controller;
+package biz.agbo.baccus.controller.fragment;
 
+import biz.agbo.baccus.R;
+import biz.agbo.baccus.model.Wine;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import biz.agbo.baccus.R;
-import biz.agbo.baccus.model.Wine;
 
-public class WebActivity extends ActionBarActivity {
+public class WebFragment extends Fragment {
 	
-	public final static String EXTRA_WINE = "biz.agbo.baccus.extra.WINE";
+	public final static String ARG_WINE = "biz.agbo.baccus.extra.fragment.WINE";
 	
 	private WebView mBrowser = null;
 	private ProgressBar mLoading = null;
@@ -24,25 +27,20 @@ public class WebActivity extends ActionBarActivity {
 	
 	
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 		outState.putString(STATE_URL, mBrowser.getUrl());
 	}
 
-
+	
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
-		super.onCreateOptionsMenu(menu);
-		MenuInflater inflater = getMenuInflater();
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.web, menu);
-		return true;
 	}
-
-
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == R.id.menu_reload){
@@ -54,18 +52,23 @@ public class WebActivity extends ActionBarActivity {
 
 
 
-	protected void onCreate(android.os.Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_web);
-	
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreateView(inflater, container, savedInstanceState);
 		
-		// Accedo a las vistas
-		mBrowser = (WebView)findViewById(R.id.browser);
-		mLoading = (ProgressBar)findViewById(R.id.loading);
+		View root = inflater.inflate(R.layout.fragment_web, container, false);
 		
 		// Creo el modelo
 		
-		mWine = (Wine)getIntent().getSerializableExtra(EXTRA_WINE);
+		mWine = (Wine)getArguments().getSerializable(ARG_WINE);
+		
+		// Accedo a las vistas
+		mBrowser = (WebView)root.findViewById(R.id.browser);
+		mLoading = (ProgressBar)root.findViewById(R.id.loading);
+		
+		
 		
 		// Configurar el browser
 		
@@ -100,5 +103,7 @@ public class WebActivity extends ActionBarActivity {
 		}else{
 			mBrowser.loadUrl(savedInstanceState.getString(STATE_URL));
 		}
-	};
+		
+		return root;
+	}
 }
