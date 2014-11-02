@@ -52,8 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/ic_menu_info_details"
-                    android:contentDescription="@string/go_to_web"
-                    android:onClick="goToWeb" />
+                    android:contentDescription="@string/go_to_web" />
 
             </RelativeLayout>
 

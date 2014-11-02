@@ -1,9 +1,5 @@
 package biz.agbo.baccus.controller.fragment;
 
-import biz.agbo.baccus.R;
-import biz.agbo.baccus.controller.activity.SettingsActivity;
-import biz.agbo.baccus.controller.activity.WebActivity;
-import biz.agbo.baccus.model.Wine;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +11,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.ImageView.ScaleType;
+import biz.agbo.baccus.R;
+import biz.agbo.baccus.controller.activity.SettingsActivity;
+import biz.agbo.baccus.controller.activity.WebActivity;
+import biz.agbo.baccus.model.Wine;
 
 public class WineFragment extends Fragment {
 
@@ -53,6 +54,12 @@ public class WineFragment extends Fragment {
 			startActivityForResult(settings, SETTINGS_REQUEST);
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 	}
 	
 	@Override
@@ -99,17 +106,23 @@ public class WineFragment extends Fragment {
 			mWineImage.setScaleType((ScaleType) savedInstanceState.getSerializable(STATE_WINE_IMAGE_SCALE_TYPE));
 		}
 		
+		ImageButton goToWebButton = (ImageButton) root.findViewById(R.id.go_to_web_button);
+		goToWebButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent webIntent = new Intent(getActivity(), WebActivity.class);
+				webIntent.putExtra(WebActivity.EXTRA_WINE, mWine);
+				startActivity(webIntent);
+			}
+		});
+		
 		return root;
 	}
 	
 	public void changeImage(View v){
 		mWineImage.setImageResource(mWine.getPhoto());
-	}
-	
-	public void goToWeb(View v){
-		Intent webIntent = new Intent(getActivity(), WebActivity.class);
-		webIntent.putExtra(WebActivity.EXTRA_WINE, mWine);
-		startActivity(webIntent);
 	}
 	
 	@Override

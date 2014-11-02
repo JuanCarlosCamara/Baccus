@@ -49,6 +49,12 @@ public class WebFragment extends Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
 
 
 
