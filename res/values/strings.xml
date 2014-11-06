@@ -9,5 +9,6 @@
     <string name="go_to_web">Ir a la web</string>
     <string name="settings">Ajustes</string>
     <string name="title_activity_winery">WineryActivity</string>
-
+	<string name="next">Siguiente</string>
+	<string name="previous">Anterior</string>
 </resources>

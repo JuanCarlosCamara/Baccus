@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +25,7 @@ public class WebFragment extends Fragment {
 	private WebView mBrowser = null;
 	private ProgressBar mLoading = null;
 	private Wine mWine = null;
+	private ActionBar mActionBar = null;
 	private static String STATE_URL;
 	
 	
@@ -46,6 +49,8 @@ public class WebFragment extends Fragment {
 		if(item.getItemId() == R.id.menu_reload){
 			mBrowser.reload();
 			return true;
+		}else if(item.getItemId() == android.R.id.home){
+			getActivity().finish();
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -109,6 +114,12 @@ public class WebFragment extends Fragment {
 		}else{
 			mBrowser.loadUrl(savedInstanceState.getString(STATE_URL));
 		}
+		
+		mActionBar = (ActionBar)((ActionBarActivity)getActivity()).getSupportActionBar();
+		
+		mActionBar.setDisplayHomeAsUpEnabled(true);
+		mActionBar.setTitle(mWine.getName());
+		mActionBar.setIcon(mWine.getPhoto());
 		
 		return root;
 	}
