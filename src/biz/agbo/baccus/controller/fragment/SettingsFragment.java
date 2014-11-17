@@ -1,9 +1,14 @@
 package biz.agbo.baccus.controller.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +20,10 @@ import android.widget.RadioGroup;
 import biz.agbo.baccus.R;
 import biz.agbo.baccus.controller.activity.SettingsActivity;
 
-public class SettingsFragment extends Fragment implements OnClickListener {
+public class SettingsFragment extends DialogFragment implements OnClickListener {
 	
 	public static final String ARG_WINE_IMAGE_SCALE_TYPE = "biz.agbo.baccus.fragment.WINE_IMAGE_SCALE_TYPE";
+	public static final String PREF_IMAGE_SCALE_TYPE = "image_scale_type";
 	
 	private RadioGroup mOptions = null;
 	
@@ -46,23 +52,50 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	}
 	
 	public void save(View v){
+		
+		ScaleType selectedScaleType = null;
+		
+		
 		Intent config = new Intent();
 		
+		SharedPreferences.Editor preferenceManager = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+		
 		if (mOptions.getCheckedRadioButtonId() == R.id.fit_radio){
-			config.putExtra(SettingsActivity.EXTRA_WINE_IMAGE_SCALE_TYPE, ScaleType.FIT_XY);
+			selectedScaleType = ScaleType.FIT_XY;
 		}else{
-			config.putExtra(SettingsActivity.EXTRA_WINE_IMAGE_SCALE_TYPE, ScaleType.FIT_CENTER);
+			selectedScaleType = ScaleType.FIT_CENTER;
 		}
 		
-		getActivity().setResult(Activity.RESULT_OK, config);
+		config.putExtra(SettingsActivity.EXTRA_WINE_IMAGE_SCALE_TYPE, selectedScaleType);
+		preferenceManager.putString(PREF_IMAGE_SCALE_TYPE, selectedScaleType.toString());
 		
-		getActivity().finish();
+		preferenceManager.commit();
+		
+		Intent result = new Intent();
+		result.putExtra(SettingsActivity.EXTRA_WINE_IMAGE_SCALE_TYPE, selectedScaleType);
+		
+		if(getTargetFragment() != null){
+			getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, result);
+			dismiss();
+		}else{
+		
+			getActivity().setResult(Activity.RESULT_OK, config);
+			
+			getActivity().finish();
+		}
 	}
 	
 	public void cancel(View v){
-		getActivity().setResult(Activity.RESULT_CANCELED);
 		
-		getActivity().finish();
+		if(getTargetFragment() != null){
+			getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
+			dismiss();
+		}else{
+		
+			getActivity().setResult(Activity.RESULT_CANCELED);
+			
+			getActivity().finish();
+		}
 	}
 
 	@Override
@@ -79,4 +112,12 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		}
 	}
 
+	@Override
+	@NonNull
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		Dialog dialog = super.onCreateDialog(savedInstanceState);
+		dialog.setTitle(R.string.settings);
+		return dialog;
+	}
+	
 }

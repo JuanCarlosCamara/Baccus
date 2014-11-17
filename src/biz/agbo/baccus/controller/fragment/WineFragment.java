@@ -3,6 +3,7 @@ package biz.agbo.baccus.controller.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -48,11 +49,14 @@ public class WineFragment extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == R.id.menu_settings){
-			Intent settings = new Intent(getActivity(), SettingsActivity.class);
-			settings.putExtra(SettingsActivity.EXTRA_WINE_IMAGE_SCALE_TYPE, mWineImage.getScaleType());
-			startActivityForResult(settings, SETTINGS_REQUEST);
-		}
+		
+		SettingsFragment settingsFragment = new SettingsFragment();
+		Bundle arguments = new Bundle();
+		arguments.putSerializable(SettingsFragment.ARG_WINE_IMAGE_SCALE_TYPE,mWineImage.getScaleType());
+		settingsFragment.setArguments(arguments);
+		settingsFragment.setTargetFragment(this, SETTINGS_REQUEST);
+		settingsFragment.show(getFragmentManager(), null);
+		
 		return super.onOptionsItemSelected(item);
 	}
 	
@@ -86,7 +90,7 @@ public class WineFragment extends Fragment {
 		
 		// Damos valor a las vistas con el modelo
 		
-		mWineImage.setImageResource(mWine.getPhoto());
+		mWineImage.setImageBitmap(mWine.getPhoto(getActivity()));
 		mWineNameText.setText(mWine.getName());
 		mWineTypeText.setText(mWine.getType());
 		mWineOriginText.setText(mWine.getOrigin());
@@ -122,7 +126,7 @@ public class WineFragment extends Fragment {
 	}
 	
 	public void changeImage(View v){
-		mWineImage.setImageResource(mWine.getPhoto());
+		mWineImage.setImageBitmap(mWine.getPhoto(getActivity()));
 	}
 	
 	@Override
@@ -138,6 +142,16 @@ public class WineFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(STATE_WINE_IMAGE_SCALE_TYPE, mWineImage.getScaleType());
+	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		if(PreferenceManager.getDefaultSharedPreferences(getActivity()).contains(SettingsFragment.PREF_IMAGE_SCALE_TYPE)){
+			mWineImage.setScaleType(ScaleType.valueOf(PreferenceManager.getDefaultSharedPreferences(getActivity()).
+					getString(SettingsFragment.PREF_IMAGE_SCALE_TYPE, ScaleType.FIT_XY.toString())));
+		}
 	}
 	
 }

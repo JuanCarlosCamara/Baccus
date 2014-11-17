@@ -11,4 +11,5 @@
     <string name="title_activity_winery">WineryActivity</string>
 	<string name="next">Siguiente</string>
 	<string name="previous">Anterior</string>
+	<string name="downloading">Descargando</string>
 </resources>

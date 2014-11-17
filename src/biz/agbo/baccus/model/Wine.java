@@ -1,8 +1,17 @@
 package biz.agbo.baccus.model;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 public class Wine implements Serializable{
 	/**
@@ -12,9 +21,11 @@ public class Wine implements Serializable{
 	/**
 	 * Atributos
 	 */
+	private String mId = null;
 	private String mName = null;
 	private String mType = null;
-	private int mPhoto = 0;
+	private Bitmap mPhoto = null;
+	private String mPhotoURL = null;
 	private String mWineCompanyWeb = null;
 	private String mNotes = null;
 	private String mOrigin = null;
@@ -22,13 +33,14 @@ public class Wine implements Serializable{
 	private String mWineCompanyName = null;
 	private List<String> mGrapes = new LinkedList<String>();
 
-	public Wine(String name, String type, int photo, String wineCompanyWeb,
+	public Wine(String id, String name, String type, String photoURL, String wineCompanyWeb,
 			String notes, String origin, int rating, String wineCompanyName,
 			List<String> grapes) {
 		super();
+		mId = id;
 		mName = name;
 		mType = type;
-		mPhoto = photo;
+		mPhotoURL = photoURL;
 		mWineCompanyWeb = wineCompanyWeb;
 		mNotes = notes;
 		mOrigin = origin;
@@ -37,7 +49,10 @@ public class Wine implements Serializable{
 		mGrapes = grapes;
 	}
 
-
+	public String getId() {
+		return mId;
+	}
+	
 	public String getName() {
 		return mName;
 	}
@@ -57,14 +72,47 @@ public class Wine implements Serializable{
 		mType = type;
 	}
 
+	public String getPhotoURL(){
+		return mPhotoURL;
+	}
 
-	public int getPhoto() {
+	public Bitmap getPhoto(Context context) {
+		if(mPhoto == null){
+			// Nos bajamos la photo
+			mPhoto = getBitmapFromURL(getPhotoURL(), context);
+		}
 		return mPhoto;
+	}
+	
+	public Bitmap getBitmapFromURL(String photoURL, Context context){
+		File imageFile = new File(context.getCacheDir(), mId);
+		
+		if(imageFile.exists()){
+			return BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+		}
+		InputStream in = null;
+		try{
+			in = new URL(photoURL).openStream();
+			Bitmap bmp = BitmapFactory.decodeStream(in);
+			FileOutputStream fos = new FileOutputStream(imageFile);
+			bmp.compress(Bitmap.CompressFormat.PNG, 90, fos);
+			fos.close();
+			return bmp;
+		}catch(Exception e){
+			Log.e("BACCUS", "Error downloading image", e);
+			return null;
+		}finally{
+			try{
+				if(in != null){
+					in.close();
+				}
+			}catch(Exception ex){}
+		}
 	}
 
 
-	public void setPhoto(int photo) {
-		mPhoto = photo;
+	public void setPhotoURL(String photoURL) {
+		mPhotoURL = photoURL;
 	}
 
 
@@ -130,5 +178,11 @@ public class Wine implements Serializable{
 	 */
 	public void addGrape(String grape){
 		mGrapes.add(grape);
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return getName();
 	}
 }

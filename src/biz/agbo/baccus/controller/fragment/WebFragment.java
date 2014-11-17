@@ -3,6 +3,7 @@ package biz.agbo.baccus.controller.fragment;
 import biz.agbo.baccus.R;
 import biz.agbo.baccus.model.Wine;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -119,7 +120,7 @@ public class WebFragment extends Fragment {
 		
 		mActionBar.setDisplayHomeAsUpEnabled(true);
 		mActionBar.setTitle(mWine.getName());
-		mActionBar.setIcon(mWine.getPhoto());
+		mActionBar.setIcon(new BitmapDrawable(getResources(),mWine.getPhoto(getActivity())));
 		
 		return root;
 	}

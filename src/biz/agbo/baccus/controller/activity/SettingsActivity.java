@@ -3,7 +3,6 @@ package biz.agbo.baccus.controller.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import biz.agbo.baccus.controller.fragment.SettingsFragment;
-import biz.agbo.controller.activity.FragmentContainerActivity;
 
 public class SettingsActivity extends FragmentContainerActivity {
 	

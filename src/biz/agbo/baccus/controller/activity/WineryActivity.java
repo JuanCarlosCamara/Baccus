@@ -8,6 +8,8 @@ import biz.agbo.baccus.R;
 import biz.agbo.baccus.controller.fragment.WineryFragment;
 
 public class WineryActivity extends ActionBarActivity {
+	
+	public final static String EXTRA_WINE_INDEX = "biz.agbo.baccus.controller.activity.WINE_INDEX";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +21,10 @@ public class WineryActivity extends ActionBarActivity {
 		Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 		if(fragment == null){
 			fragment = new WineryFragment();
+			Bundle arguments = new Bundle();
+			arguments.putInt(WineryFragment.ARG_WINE_INDEX, getIntent().getIntExtra(EXTRA_WINE_INDEX, 0));
+			arguments.putBoolean(WineryFragment.ARG_SHOW_TABS, true);
+			fragment.setArguments(arguments);
 			fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
 		}
 	}
