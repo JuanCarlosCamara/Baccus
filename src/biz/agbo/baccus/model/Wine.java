@@ -8,9 +8,12 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.os.StrictMode;
 import android.util.Log;
 
 public class Wine implements Serializable{
@@ -83,8 +86,14 @@ public class Wine implements Serializable{
 		}
 		return mPhoto;
 	}
-	
+	@TargetApi(11)
 	public Bitmap getBitmapFromURL(String photoURL, Context context){
+		
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+			StrictMode.setThreadPolicy(policy);
+		}
+		
 		File imageFile = new File(context.getCacheDir(), mId);
 		
 		if(imageFile.exists()){

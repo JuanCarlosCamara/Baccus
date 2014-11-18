@@ -97,9 +97,10 @@ public class Winery {
 				for(int j = 0; j< jSONGrapes.length(); j++){
 					grapes.add(jSONGrapes.getJSONObject(j).getString("grape"));
 				}
+				
+				winery.mWines.add(new Wine(id, name, type, picture, companyWebsite, notes, origin, rating, company, grapes));
 			}
 			
-			winery.mWines.add(new Wine(id, name, type, picture, companyWebsite, notes, origin, rating, company, grapes));
 		}
 		
 		return winery;
