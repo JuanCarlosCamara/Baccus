@@ -3,6 +3,8 @@ package biz.agbo.baccus.controller.activity;
 import biz.agbo.baccus.R;
 import biz.agbo.baccus.controller.fragment.WineListFragment;
 import biz.agbo.baccus.controller.fragment.WineryFragment;
+import biz.agbo.baccus.model.Winery;
+import biz.agbo.baccus.model.Winery.WineType;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,8 +14,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 
-public class WineListActivity extends ActionBarActivity implements OnItemClickListener{
+public class WineListActivity extends ActionBarActivity implements OnChildClickListener{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +45,25 @@ public class WineListActivity extends ActionBarActivity implements OnItemClickLi
 			}
 		}
 	}
-
+	
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
+	public boolean onChildClick(ExpandableListView list, View arg1, int groupPosition, int childPosition, long arg4) {
 		
 		WineryFragment wineryFragment = (WineryFragment)getSupportFragmentManager().findFragmentById(R.id.winery);
+		Winery winery = Winery.getInstance();
+		
+		int index = winery.getAbsolutePosition(WineType.values()[groupPosition], childPosition);
+		
 		if(wineryFragment != null){
-			wineryFragment.selectWine(position);
+			wineryFragment.selectWine(index);
 		}else{
 			
 			Intent wineryIntent = new Intent(this, WineryActivity.class);
-			wineryIntent.putExtra(WineryActivity.EXTRA_WINE_INDEX, position);
+			wineryIntent.putExtra(WineryActivity.EXTRA_WINE_INDEX, index);
 			startActivity(wineryIntent);
 		}
+		
+		return true;
 		
 	}
 

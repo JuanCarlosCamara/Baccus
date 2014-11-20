@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +27,12 @@ public class Winery {
 	private static Winery sInstance = null;
 	private static final String sWinesURL = "http://baccusapp.herokuapp.com/wines";
 	
-	private List<Wine> mWines = null;
+	public static enum WineType{
+		RED, WHITE, ROSE, OTHER
+	}
+	
+	private List<Wine> mListWines = null;
+	private HashMap<WineType, List<Wine>> mHashWines = null;
 	
 	public static Winery getInstance(){
 		if(sInstance == null){
@@ -50,9 +56,16 @@ public class Winery {
 		return (sInstance != null);
 	}
 	
+	private Winery(){
+		mListWines = new LinkedList<Wine>();
+		mHashWines = new HashMap<Winery.WineType, List<Wine>>();
+		for(WineType type : WineType.values()){
+			mHashWines.put(type, new LinkedList<Wine>());
+		}
+	}
+	
 	private static Winery downloadWines() throws MalformedURLException, IOException, JSONException{
 		Winery winery =  new Winery();
-		winery.mWines = new LinkedList<Wine>();
 		URLConnection connection = new URL(sWinesURL).openConnection();
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -98,9 +111,24 @@ public class Winery {
 					grapes.add(jSONGrapes.getJSONObject(j).getString("grape"));
 				}
 				
-				winery.mWines.add(new Wine(id, name, type, picture, companyWebsite, notes, origin, rating, company, grapes));
+				Wine newWine = new Wine(id, name, type, picture, companyWebsite, notes, origin, rating, company, grapes);
+				
+				if(type.equalsIgnoreCase("tinto")){
+					winery.mHashWines.get(WineType.RED).add(newWine);
+				}else if(type.equalsIgnoreCase("blanco")){
+					winery.mHashWines.get(WineType.WHITE).add(newWine);
+				}else if(type.equalsIgnoreCase("rosado")){
+					winery.mHashWines.get(WineType.ROSE).add(newWine);
+				}else{
+					winery.mHashWines.get(WineType.OTHER).add(newWine);
+				}
 			}
 			
+		}
+		
+		for(WineType type : WineType.values()){
+			List<Wine> wineList = winery.mHashWines.get(type);
+			winery.mListWines.addAll(wineList);
 		}
 		
 		return winery;
@@ -128,16 +156,30 @@ public class Winery {
 //		
 //	}
 	
+	public Wine getWine(WineType type, int index){
+		return mHashWines.get(type).get(index);
+	}
+	
+	public int getWineCount(WineType type){
+		return mHashWines.get(type).size();
+	}
+	
+	public int getAbsolutePosition(WineType type, int relativePosition){
+		Wine wine = getWine(type,relativePosition);
+		return mListWines.indexOf(wine);
+		
+	}
+	
 	public Wine getWine(int index){
-		return mWines.get(index);
+		return mListWines.get(index);
 	}
 	
 	public int getCount(){
-		return mWines.size();
+		return mListWines.size();
 	}
 	
 	public List<Wine> getWineList(){
-		return mWines;
+		return mListWines;
 	}
 
 }
