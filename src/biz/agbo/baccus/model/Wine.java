@@ -27,7 +27,6 @@ public class Wine implements Serializable{
 	private String mId = null;
 	private String mName = null;
 	private String mType = null;
-	private Bitmap mPhoto = null;
 	private String mPhotoURL = null;
 	private String mWineCompanyWeb = null;
 	private String mNotes = null;
@@ -80,11 +79,8 @@ public class Wine implements Serializable{
 	}
 
 	public Bitmap getPhoto(Context context) {
-		if(mPhoto == null){
-			// Nos bajamos la photo
-			mPhoto = getBitmapFromURL(getPhotoURL(), context);
-		}
-		return mPhoto;
+		// Nos bajamos la photo
+		return getBitmapFromURL(getPhotoURL(), context);
 	}
 	@TargetApi(11)
 	public Bitmap getBitmapFromURL(String photoURL, Context context){
